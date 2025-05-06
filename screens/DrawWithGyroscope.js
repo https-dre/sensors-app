@@ -75,21 +75,16 @@ export default function Game() {
 
 	// jogador
 	const playerSize = 50;
-	const player = Matter.Bodies.circle(
-		width / 2,
-		height - 150,
-		playerSize / 2,
-		{
-			isStatic: false,
-			label: "player",
-			restitution: 0.1,
-			friction: 0.01,
-			frictionAir: 0.02,
-			collisionFilter: {
-				group: 0,
-			},
-		}
-	);
+	const player = Matter.Bodies.circle(width / 2, height - 150, playerSize / 2, {
+		isStatic: false,
+		label: "player",
+		restitution: 0.1,
+		friction: 0.01,
+		frictionAir: 0.02,
+		collisionFilter: {
+			group: 0,
+		},
+	});
 
 	useEffect(() => {
 		if (started && !gameOver) {
@@ -149,7 +144,10 @@ export default function Game() {
 						<Text style={styles.scoreText}>Score: {score}</Text>
 					</>
 				) : (
-					<Text style={styles.titleText}>Desvie dos Obstáculos!</Text>
+					<View style={{ justifyContent: 'center', paddingHorizontal: 50, flexDirection: 'column' }}>
+						<Text style={styles.titleText}>Desvie dos Obstáculos!</Text>
+						<Text>Antes de Iniciar, certique-se de manter o celular alinhado para calibrar os sensores!</Text>
+					</View>
 				)}
 				<TouchableOpacity style={styles.startButton} onPress={startGame}>
 					<Text style={styles.startButtonText}>{gameOver ? "Play Again" : "Start Game"}</Text>
