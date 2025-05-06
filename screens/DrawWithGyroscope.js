@@ -10,7 +10,7 @@ const { width, height } = Dimensions.get("window");
 const Physics = (entities, { time }) => {
 	const engine = entities.physics.engine;
 
-	Matter.Engine.update(engine, 16.667);
+	Matter.Engine.update(engine, time.delta);
 
 	// tenta forçar a posição Y fixa do jogador
 	const { player } = entities;
@@ -52,6 +52,7 @@ export default function Game() {
 	const [score, setScore] = useState(0);
 	const [gameOver, setGameOver] = useState(false);
 	const [started, setStarted] = useState(false);
+	const [gravity, setGravity] = useState(1);
 
 	const wallThickness = 20;
 	const floor = Matter.Bodies.rectangle(
@@ -102,16 +103,21 @@ export default function Game() {
 			});
 
 			world.gravity.x = 0;
-			world.gravity.y = 1; // gravidade padrão
+			world.gravity.y = gravity; // gravidade padrão
 			world.gravity.scale = 0.001;
 
 			const scoreInterval = setInterval(() => {
 				setScore((prev) => prev + 1);
 			}, 100);
 
+			const gravityInterval = setInterval(() => {
+				setGravity((prev) => prev + 0.02);
+			}, 1000)
+
 			return () => {
 				sub.remove();
 				clearInterval(scoreInterval);
+				clearInterval(gravityInterval)
 				Matter.World.clear(world, false);
 			};
 		}
@@ -119,6 +125,7 @@ export default function Game() {
 
 	const startGame = () => {
 		setScore(0);
+		setGravity(1);
 		setGameOver(false);
 		setStarted(true);
 
@@ -159,6 +166,7 @@ export default function Game() {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.scoreText}>Score: {score}</Text>
+			<Text style={styles.scoreText}>Gravity: {Number(gravity.toFixed(2))}</Text>
 			<GameEngine
 				ref={gameEngine}
 				systems={[Physics, GameSystem, ObstacleGenerator]}
@@ -204,7 +212,7 @@ const styles = StyleSheet.create({
 	scoreText: {
 		fontSize: 20,
 		fontWeight: "bold",
-		marginTop: 20,
+		marginTop: 5,
 		color: "#333",
 	},
 	startButton: {
