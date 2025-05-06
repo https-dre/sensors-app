@@ -15,7 +15,7 @@ export default function RaceAccelerometer() {
 			const fakeSpeed = Math.min(gForce * 100, 300); // escala até 300 km/h
 			setSpeed(Math.round(fakeSpeed));
 
-			// anima a barra
+			// anima a barrinha
 			Animated.timing(barAnim, {
 				toValue: fakeSpeed,
 				duration: 100,
